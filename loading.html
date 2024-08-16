@@ -30,8 +30,12 @@
   }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6YEQ7Q0XRC"></script>
-  <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-6YEQ7Q0XRC');</script>
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6YEQ7Q0XRC');
+
     function getQueryParam(param) {
       let urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
@@ -46,7 +50,8 @@
         window.navigator.serviceWorker.register("/sw.js", {
           scope: "/service/",
         });
-        location.href = '/loader.html';
+        // Removed redundant `location.href`
+        // location.href = '/loader.html';
       }
     }
     
