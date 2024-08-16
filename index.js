@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createBareServer } from '@tomphttp/bare-server-node';
 import request from '@cypress/request';
 import chalk from 'chalk';
-import packageJson from './package.json' assert { type: 'json' }; // Ensure package.json is treated as a JSON module
+import packageJson from 'package.json' assert { type: 'json' }; // Ensure package.json is treated as a JSON module
 
 const __dirname = path.resolve();
 const server = http.createServer();
@@ -26,25 +26,25 @@ app.use(
 app.use(express.static(__dirname));
 
 app.get('/app', (req, res) => {
-  res.sendFile(path.join(__dirname, './index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 app.get('/student', (req, res) => {
-  res.sendFile(path.join(__dirname, './loader.html'));
+  res.sendFile(path.join(__dirname, 'loader.html'));
 });
 app.get('/apps', (req, res) => {
-  res.sendFile(path.join(__dirname, './apps.html'));
+  res.sendFile(path.join(__dirname, 'apps.html'));
 });
 app.get('/gms', (req, res) => {
-  res.sendFile(path.join(__dirname, './gms.html'));
+  res.sendFile(path.join(__dirname, 'gms.html'));
 });
 app.get('/lessons', (req, res) => {
-  res.sendFile(path.join(__dirname, './agloader.html'));
+  res.sendFile(path.join(__dirname, 'agloader.html'));
 });
 app.get('/info', (req, res) => {
-  res.sendFile(path.join(__dirname, './info.html'));
+  res.sendFile(path.join(__dirname, 'info.html'));
 });
 app.get('/go', (req, res) => {
-  res.sendFile(path.join(__dirname, './loading.html'));
+  res.sendFile(path.join(__dirname, 'loading.html'));
 });
 app.get('/worker.js', (req, res) => {
   request('https://cdn.surfdoge.pro/worker.js', (error, response, body) => {
@@ -60,7 +60,7 @@ app.get('/worker.js', (req, res) => {
 // Update the 404 page to serve from the root directory
 app.use((req, res) => {
   res.statusCode = 404;
-  res.sendFile(path.join(__dirname, './404.html'));
+  res.sendFile(path.join(__dirname, '404.html'));
 });
 
 server.on('request', (req, res) => {
