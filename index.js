@@ -30,13 +30,24 @@ app.get('/go', (req, res) => res.sendFile(path.join(__dirname, 'loading.html')))
 
 app.get('/worker.js', (req, res) => {
   request('https://cdn.surfdoge.pro/worker.js', (error, response, body) => {
-    if (!error && response.statusCode === 200) {
-      res.setHeader('Content-Type', 'text/javascript');
-      res.send(body);
-    } else {
+    if (error) {
+      console.error('Error fetching worker script:', error);
       res.status(500).send('Error fetching worker script');
+      return; // Stop execution if error
     }
+    if (response.statusCode !== 200) {
+      console.error('Error fetching worker script:', `Status code: ${response.statusCode}`);
+      res.status(500).send('Error fetching worker script');
+      return; // Stop execution if error
+    }
+    res.setHeader('Content-Type', 'text/javascript');
+    res.send(body);
   });
+});
+
+// Define specific routes before the catch-all route
+app.get('/other-route', (req, res) => {
+  // ... Handle the request
 });
 
 app.use((req, res) => {
@@ -51,26 +62,30 @@ server.on('request', (req, res) => {
   }
 });
 
+// Simplify the 'upgrade' handler if you only care about bare server upgrades
 server.on('upgrade', (req, socket, head) => {
   if (bareServer.shouldRoute(req)) {
     bareServer.routeUpgrade(req, socket, head);
-  } else {
-    socket.end();
   }
 });
 
 server.on('listening', () => {
-  console.log(chalk.bgBlue.white.bold('  Welcome to Doge V4, user!  ') + '\n');
-  console.log(chalk.cyan('-----------------------------------------------'));
-  console.log(chalk.green('  🌟 Status: ') + chalk.bold('Active'));
-  console.log(chalk.green('  🌍 Port: ') + chalk.bold(chalk.yellow(server.address().port)));
-  console.log(chalk.green('  🕒 Time: ') + chalk.bold(new Date().toLocaleTimeString()));
-  console.log(chalk.cyan('-----------------------------------------------'));
-  console.log(chalk.magenta('📦 Version: ') + chalk.bold(version));
-  console.log(chalk.magenta('🔗 URL: ') + chalk.underline('http://localhost:' + server.address().port));
-  console.log(chalk.cyan('-----------------------------------------------'));
-  console.log(chalk.blue('💬 Discord: ') + chalk.underline(discord));
-  console.log(chalk.cyan('-----------------------------------------------'));
+  try {
+    const port = server.address().port;
+    console.log(chalk.bgBlue.white.bold('  Welcome to Doge V4, user!  ') + '\n');
+    console.log(chalk.cyan('-----------------------------------------------'));
+    console.log(chalk.green('  🌟 Status: ') + chalk.bold('Active'));
+    console.log(chalk.green('  🌍 Port: ') + chalk.bold(chalk.yellow(port)));
+    console.log(chalk.green('  🕒 Time: ') + chalk.bold(new Date().toLocaleTimeString()));
+    console.log(chalk.cyan('-----------------------------------------------'));
+    console.log(chalk.magenta('📦 Version: ') + chalk.bold(version));
+    console.log(chalk.magenta('🔗 URL: ') + chalk.underline(`http://localhost:${port}`));
+    console.log(chalk.cyan('-----------------------------------------------'));
+    console.log(chalk.blue('💬 Discord: ') + chalk.underline(discord));
+    console.log(chalk.cyan('-----------------------------------------------'));
+  } catch (error) {
+    console.error('Error getting server address:', error);
+  }
 });
 
 function shutdown(signal) {
@@ -86,8 +101,13 @@ function shutdown(signal) {
   });
 }
 
+// Handle SIGTERM, SIGINT, and uncaught exceptions
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  shutdown('UncaughtException');
+});
 
 server.listen(8001, () => {
   console.log(`Server running on http://localhost:8001`);
