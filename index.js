@@ -40,7 +40,7 @@ app.get('/worker.js', (req, res) => {
 });
 
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, '404.html'));
+  res.status(404).sendFile(path.join(__dirname, 'gms.html'));
 });
 
 server.on('request', (req, res) => {
