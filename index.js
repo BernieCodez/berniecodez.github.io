@@ -24,25 +24,25 @@ app.use(
 
 app.use(express.static(path.join(__dirname, 'static')));
 app.get('/app', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/index.html'));
+  res.sendFile(path.join(__dirname, './index.html'));
 });
 app.get('/student', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/loader.html'));
+  res.sendFile(path.join(__dirname, './loader.html'));
 });
 app.get('/apps', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/apps.html'));
+  res.sendFile(path.join(__dirname, './apps.html'));
 });
 app.get('/gms', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/gms.html'));
+  res.sendFile(path.join(__dirname, './gms.html'));
 });
 app.get('/lessons', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/agloader.html'));
+  res.sendFile(path.join(__dirname, './agloader.html'));
 });
 app.get('/info', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/info.html'));
+  res.sendFile(path.join(__dirname, './info.html'));
 });
 app.get('/go', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/loading.html'));
+  res.sendFile(path.join(__dirname, './loading.html'));
 });
 app.get('/worker.js', (req, res) => {
   request('https://cdn.surfdoge.pro/worker.js', (error, response, body) => {
@@ -57,7 +57,7 @@ app.get('/worker.js', (req, res) => {
 
 app.use((req, res) => {
   res.statusCode = 404;
-  res.sendFile(path.join(__dirname, './static/404.html'));
+  res.sendFile(path.join(__dirname, './404.html'));
 });
 
 server.on('request', (req, res) => {
